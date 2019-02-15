@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//to das ce hoces vidt v inspectorju ta objkekt kot spremenljivko
+//[System.Serializable]
+
 public class PlayerController : MonoBehaviour
 {
 
