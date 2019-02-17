@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            Instantiate(bullet, new Vector3(this.transform.position.x,-7,0), Quaternion.identity);
+            Instantiate(bullet, new Vector3(this.transform.position.x -0.02f,-7), Quaternion.identity);
         }
     }
 }
