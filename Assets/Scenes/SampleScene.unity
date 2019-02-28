@@ -288,7 +288,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eba8f31e5251f43b42f0b56115727f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positions: 
   enemy: {fileID: 5306257536219169033, guid: a26b0afc8d5c1c748a0bfb222360029b, type: 3}
+  bigBullet: {fileID: 7361061837096234445, guid: f7f99d67486662d4cbd8985fe1a91d78,
+    type: 3}
+  stillAlive: 0
 --- !u!4 &1144062762
 Transform:
   m_ObjectHideFlags: 0

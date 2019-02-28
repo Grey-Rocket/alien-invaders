@@ -13,7 +13,7 @@ public class BigBulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y - 0.25f);
+        this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y - 0.15f);
 
         if (this.transform.position.y < -10)
         { 
