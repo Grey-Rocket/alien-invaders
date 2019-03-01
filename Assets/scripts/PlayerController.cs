@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 //to das ce hoces vidt v inspectorju ta objkekt kot spremenljivko
 //[System.Serializable]
@@ -9,10 +9,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
+    public Image[] lifeIcons;
+    int lives;
+
+    public GameObject enemySquad;
     public Object bullet;
     // Start is called before the first frame update
     void Start()
     {
+        lives = lifeIcons.Length;
         this.transform.position = new Vector2(-0.5f , -7.5f);
     }
 
@@ -35,6 +40,22 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             Instantiate(bullet, new Vector3(this.transform.position.x -0.02f,-7), Quaternion.identity);
+        }
+    }
+
+    public void IsHit()
+    { 
+
+        lives--;
+        if (lives <= 0)
+        {
+            Destroy(lifeIcons[lives].gameObject);
+            enemySquad.GetComponent<EnemyControll>().End();
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Destroy(lifeIcons[lives].gameObject);
         }
     }
 }

@@ -25,8 +25,10 @@ public class BigBulletScript : MonoBehaviour
     {
         if (collision.tag.Equals("Player"))
         {
-            Destroy(collision.gameObject);
+
+            collision.gameObject.GetComponent<PlayerController>().IsHit();
             Destroy(this.gameObject);
         }
+        this.GetComponent<BoxCollider2D>().enabled = true;
     }
 }

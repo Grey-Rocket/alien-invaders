@@ -1,70 +1,117 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class EnemyControll : MonoBehaviour
 {
+    public int[] positions;
 
-    public List<int> positions;
+    public Text endText;
 
     public Object enemy;
     public Object bigBullet;
 
-    public int[,] arrayOfUnits;
+    public int[] arrayOfUnits;
     public int stillAlive;
+
+    float fXPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         //first one is at -12.5f,7
-        float x = -12.5f;
+        fXPosition = -12.5f;
         float y = 7f;
 
-        arrayOfUnits = new int[11,3];
+        arrayOfUnits = new int[11];
 
+        //pointers to positions
+        positions = new int[11];
+        stillAlive = 11;
+
+        //better way of doing this would be to switch these two for
+        //loops, but I don't want to bother with tuning the spawn positions
         for (int k = 0; k < 3; k++)
-        {
-            for (int i = 0; i < 11; i++) {
-                Instantiate(enemy, new Vector3(x, y), Quaternion.identity);
-                x += 2.5f;
-                arrayOfUnits[i,k] = 1;
-            }
-            x = -12.5f;
-            y -= 2;
-        }
-
-        positions = new List<int>();
-        stillAlive = 12;
-        for (int i = 0; i < 11; i++)
-        {
-            positions.Add(i);
-        }
-
-        InvokeRepeating("Attack",0f, 1f);
-        /*
-        for (int k = 2; k >= 0; k--)
         {
             for (int i = 0; i < 11; i++)
             {
-                Debug.Log("k = " + k + " i = " + i + " vrednost = " + arrayOfUnits[i,k]);
+                //spawns a prefab
+                GameObject mySon = (GameObject)Instantiate(enemy, new Vector3(fXPosition, y), Quaternion.identity);
+                mySon.transform.parent = this.transform;
+
+                fXPosition += 2.5f;
+
+                //just to track how many enemies are still in columns
+                arrayOfUnits[i] = 3;
+
+                //
+                positions[i] = i;
             }
+            fXPosition = -12.5f;
+            y -= 2;
         }
-        */
+
+        //repeatedly calls a function every 0.5f seconds, 0f seconds from the call
+        InvokeRepeating("Attack", 0f, 0.2f);
     }
 
     void Attack()
     {
-        Debug.Log((int)(Random.Range(0,stillAlive)));
-        Instantiate(bigBullet, new Vector3(1f, 1f), Quaternion.identity);
-        stillAlive = 1;
+        int bulletX = positions[(int)(Random.Range(0, stillAlive))];
+        //Debug.Log(bulletX);
+
+        Instantiate(bigBullet, new Vector3(fXPosition + 2.5f * bulletX, 7.5f-2*arrayOfUnits[bulletX]), Quaternion.identity);
     }
 
     private void Update()
     {
-        if (stillAlive <= 1)
+        if (stillAlive < 1)
         {
-            CancelInvoke("Attack");
+            End();
         }
+    }
+
+    public void UnitKilled(float objPosition)
+    {
+        int index = (int)((objPosition - fXPosition) / 2.5f);
+
+        arrayOfUnits[index]--;
+
+        if (arrayOfUnits[index] == 0)
+        {
+            //changes position
+            for (int i = 0; i < stillAlive; i++)
+            {
+                if (positions[i] == index)
+                {
+                    positions[i] = positions[stillAlive-1];
+                    stillAlive--;
+
+                    if (stillAlive == 1)
+                    {
+                        CancelInvoke("Attack");
+                        InvokeRepeating("Attack", 0f, 0.5f);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    public void End()
+    {
+        //stops function
+        CancelInvoke("Attack");
+        if (stillAlive < 1)
+        {
+            endText.text = "YOU WIN";
+        }
+        else
+        {
+            endText.text = "YOU LOOSE";
+        }
+        endText.gameObject.SetActive(true);
     }
 }
